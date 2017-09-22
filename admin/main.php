@@ -13,9 +13,18 @@
  *                            /_]'  /_]'  
  *  
  */ 	
-	session_start();
-	session_unset();
-	session_destroy();
-	//echo "<script>alert('注销成功！');</script>"
-	header("location:user.html");	
+	include("../install/config.php");	
+	$n = $_POST['n'];
+	if($_POST){
+		switch ($n){
+			case 0:
+				{
+					$result = $conn->query("SELECT COUNT(*) FROM member");
+					list($row_num) = $result->fetch_row();
+					//$row_num = $result->num_rows();
+					echo json_encode(["code" => 200, "msg" => $row_num]);					
+				}
+				break;
+		}	
+	}
 ?>

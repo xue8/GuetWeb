@@ -42,11 +42,26 @@ layui.config({
 	)
 
 	//用户数
-	$.get("../json/usersList.json",
-		function(data){
-			$(".userAll span").text(data.length);
+//	$.get("../json/usersList.json",
+//		function(data){
+//			$(".userAll span").text(data.length);
+//		}
+//	)
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		url: "../main.php",
+		data: {
+			"n": 0
+		},
+		success: function (response){
+			$(".userAll span").text(response.msg);
+		},
+		error: function (err){
+			$(".userAll span").text("error");
 		}
-	)
+	})
+
 
 	//新消息
 	$.get("../json/message.json",
