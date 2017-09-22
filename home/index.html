@@ -463,8 +463,8 @@
 								success: function(response) {
 									alert(response);
 								},
-								error: function() {
-									alert(response);
+								error: function(err) {
+									alert(err);
 								}
 							})
 						}
@@ -497,6 +497,7 @@
 									alert(err.msg);
 								}
 							})
+							break;
 						}
 					case 5:  //显示修改页信息
 						{
@@ -520,6 +521,7 @@
 									alert(err);
 								}
 							})
+							break;
 						}
 				}
 			}

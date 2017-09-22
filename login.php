@@ -14,7 +14,7 @@
  *  
  */ 
 	session_start();
-	include("config.php");
+	include("install/config.php");
 	if($_POST){
 		$studentnumber=$_POST['studentnumber'];
 		$password=$_POST['password'];

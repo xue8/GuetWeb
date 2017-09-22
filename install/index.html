@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>安装</title>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+</head>
+<body style="background-color: #76b852">
+	<div class="panel panel-default" style="width: 600px; margin: 200px auto;">
+	  <div class="panel-heading">GUET 软件部官网install</div>
+	  <div class="panel-body">
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">数据库地址</span>
+		  <input type="text" class="form-control" placeholder="一般为localhost" aria-describedby="basic-addon1" id="dbhost">
+		</div>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">数据库用户</span>
+		  <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" id="dbuser">
+		</div>	
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">数据库密码</span>
+		  <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" id="dbpassword">
+		</div>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1">数据库名称</span>
+		  <input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" id="dbname">
+		</div>	
+		<div class="col-sm-offset-2 col-sm-10" style="padding-top:10px">
+			<button type="button" class="btn btn-primary btn-lg btn-block" onclick="install()">安装</button>
+		</div>			
+	  </div>
+	</div>
+	<script type="text/javascript" src="../js/jquery-3.2.1.js"></script>
+	<script type="text/javascript">
+		function install(){
+			var dbhost=$("#dbhost").val();
+			var dbuser=$("#dbuser").val();
+			var dbpassword=$("#dbpassword").val();
+			var dbname=$("#dbname").val();
+			var data={
+				"dbhost": dbhost,
+				"dbuser": dbuser,
+				"dbpassword": dbpassword,
+				"dbname": dbname
+			};
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "config.php",
+				data: data,
+				success: function (response){
+					//ins();
+					alert()
+				},
+				error: function (err){
+					alert(err.msg);
+				}
+			});
+		}
+
+		// function ins(){
+		// 	var dbhost=$("#dbhost").val();
+		// 	var dbuser=$("#dbuser").val();
+		// 	var dbpassword=$("#dbpassword").val();
+		// 	var dbname=$("#dbname").val();
+		// 	var data={
+		// 		"dbhost": dbhost,
+		// 		"dbuser": dbuser,
+		// 		"dbpassword": dbpassword,
+		// 		"dbname": dbname
+		// 	};			
+		// 	$.ajax({
+		// 		type: "POST",
+		// 		dataType: "json",
+		// 		url: "install.php",
+		// 		data: data,
+		// 		success: function (res){
+		// 			alert(res.msg);
+		// 		}
+		// });
+		// }
+	</script>
+</body>
+</html>

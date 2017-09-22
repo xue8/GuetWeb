@@ -13,7 +13,7 @@
  *                            /_]'  /_]'  
  *  
  */ 		
-	include("../config.php");
+	include("../install/config.php");
 	session_start();
 	if($_POST){
 		$studentnumber=$_SESSION['studentnumber'];  //session判断操作对象
@@ -40,11 +40,12 @@
 					// 修改数据
 					$result=$conn->query("UPDATE member SET name='$name',phone='$phone', email='$email', qq='$qq', major='$major', hometown='$hometown'"); 
 					if(!$result){
-						echo json_encode(["code"=>'200',"msg"=>'提交成功!']);
+						echo json_encode(["code" => 200, "msg" => "修改失败"]);
 					}else {
-						echo json_encode(["code"=>'500',"msg"=>'提交失败，请联系管理员！']);
+						echo json_encode(["code" => 200, "msg" => "修改成功"]);
 					}
 				}
+				break;
 			case 5:
 				{
 					//显示数据
@@ -53,6 +54,7 @@
 					$data=array("name"=>$row['name'], "studentnumber"=>$row['studentnumber'], "email"=>$row['email'], "phone"=>$row['phone'], "qq"=>$row['qq'], "major"=>$row['major'], "hometown"=>$row['hometown']);
 					echo json_encode($data);
 				}
+				break;
 		}
 	}	
 ?>

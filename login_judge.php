@@ -13,7 +13,7 @@
  *                            /_]'  /_]'  
  *  
  */ 	
-	include("config.php");
+	include("install/config.php");
 	session_start();
 	if(isset($_SESSION['studentnumber']) && !empty($_SESSION['studentnumber'])){
 		$studentnumber=$_SESSION['studentnumber'];
