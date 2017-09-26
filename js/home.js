@@ -117,7 +117,7 @@ $(function() {
 
 //判断session
 function GetSession() {
-	$("#apply").hide();
+	$("#container").hide();
 	$("#index").show();
 	$("#changes_info").hide(); //div隐藏显示
 	$.ajax({
@@ -147,12 +147,12 @@ function GetSession() {
 function Go(n) {
 	switch(n) {
 		case 0:
-			$("#apply").hide();
+			$("#container").hide();
 			$("#index").show();
 			//$("#changes_info").hide();
 			break;
 		case 1:
-			$("#apply").show();
+			$("#container").show();
 			$("#index").hide();
 			//$("#changes_info").hide();
 			break;
@@ -174,7 +174,7 @@ function Go(n) {
 				$.ajax({
 					type: "POST",
 					dataType: "json",
-					url: "php_method.php",
+					url: "../home/php_method.php",
 					data: data,
 					success: function(response) {
 						alert(response);
@@ -184,10 +184,25 @@ function Go(n) {
 					}
 				})
 			}
-		case 3:
-			$("#apply").hide();
+		case 3:      //
+			Go(5);  //Go(5)实时显示账户信息
+			$("#container").hide();
 			$("#index").hide();
 			$("#mymodal").modal("toggle");
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				data: {
+					"n": 7
+				},
+				url: "../home/php_method.php",
+				success: function (response){
+					
+				},
+				error: function (err){
+					
+				}
+			})
 			break;
 		case 4: //修改个人信息
 			{
@@ -204,7 +219,7 @@ function Go(n) {
 				$.ajax({
 					type: "POST",
 					dataType: "json",
-					url: "php_method.php",
+					url: "../home/php_method.php",
 					data: data,
 					success: function(response) {
 						alert(response.msg);
@@ -215,12 +230,12 @@ function Go(n) {
 				})
 				break;
 			}
-		case 5: //显示修改页信息
+		case 5: //账户信息修改页
 			{
 				$.ajax({
 					type: "POST",
 					dataType: "json",
-					url: "php_method.php",
+					url: "../home/php_method.php",
 					data: {
 						"n": "5"
 					},
@@ -242,79 +257,3 @@ function Go(n) {
 	}
 }
 //go div显隐end
-
-//			//echarts start使用echarts展示报名进度条
-//			var myChart = echarts.init(document.getElementById('index'));
-//			var option = {
-//				tooltip: {
-//					trigger: 'item',
-//					formatter: "{a} <br/>{b} : {c} ({d}%)"
-//				},
-//				legend: {
-//					orient: 'vertical',
-//					x: 'left',
-//					data: ['报名进度']
-//				},
-//				toolbox: {
-//					show: true,
-//					feature: {
-//						mark: {
-//							show: true
-//						},
-//						dataView: {
-//							show: true,
-//							readOnly: false
-//						},
-//						magicType: {
-//							show: true,
-//							type: ['pie', 'funnel'],
-//							option: {
-//								funnel: {
-//									x: '25%',
-//									width: '50%',
-//									funnelAlign: 'center',
-//									max: 1548
-//								}
-//							}
-//						},
-//						restore: {
-//							show: true
-//						},
-//						saveAsImage: {
-//							show: true
-//						}
-//					}
-//				},
-//				calculable: true,
-//				series: [{
-//					name: '报名进度',
-//					type: 'pie',
-//					radius: ['50%', '70%'],
-//					itemStyle: {
-//						normal: {
-//							label: {
-//								show: false
-//							},
-//							labelLine: {
-//								show: false
-//							}
-//						},
-//						emphasis: {
-//							label: {
-//								show: true,
-//								position: 'center',
-//								textStyle: {
-//									fontSize: '30',
-//									fontWeight: 'bold'
-//								}
-//							}
-//						}
-//					},
-//					data: [{
-//						value: 335,
-//						name: '报名进度'
-//					}, ]
-//				}]
-//			};// 使用刚指定的配置项和数据显示图表。
-//      myChart.setOption(option);
-//      //echarts end
