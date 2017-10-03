@@ -1,3 +1,4 @@
+
 layui.config({
 	base : "js/"
 }).use(['form','element','layer','jquery'],function(){
@@ -41,26 +42,37 @@ layui.config({
 		}
 	)
 
-	//用户数
-//	$.get("../json/usersList.json",
-//		function(data){
-//			$(".userAll span").text(data.length);
-//		}
-//	)
-	$.ajax({
-		type: "POST",
-		dataType: "json",
-		url: "../main.php",
-		data: {
-			"n": 0
-		},
-		success: function (response){
-			$(".userAll span").text(response.msg);
-		},
-		error: function (err){
-			$(".userAll span").text("error");
-		}
-	})
+	//管理后台显示用户数
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "../main.php",
+			data: {
+				"n": "0"
+			},
+			success: function (response){
+				$("#user_num span").text(response.msg);
+			},
+			error: function (err){
+				$("#user_num span").text("error");
+			}
+		})		
+	
+	//管理后台显示申请表数量
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "../main.php",
+			data: {
+				"n": "1"
+			},
+			success: function (response){
+				$("#form_num span").text(response.msg);
+			},
+			error: function (err){
+				$("#form_num span").text("error");
+			}
+		})		
 
 
 	//新消息

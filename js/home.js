@@ -1,119 +1,6 @@
 $(document).ready(GetSession()); //浏览器加载完成执行函数
 $(document).ready(Go(5));
-
-$(function() {
-	var data, options;
-
-	// headline charts
-	data = {
-		labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-		series: [
-			[23, 29, 24, 40, 25, 24, 35],
-			[14, 25, 18, 34, 29, 38, 44],
-		]
-	};
-
-	options = {
-		height: 300,
-		showArea: true,
-		showLine: false,
-		showPoint: false,
-		fullWidth: true,
-		axisX: {
-			showGrid: false
-		},
-		lineSmooth: false,
-	};
-
-	new Chartist.Line('#headline-chart', data, options);
-
-	// visits trend charts
-	data = {
-		labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		series: [{
-			name: 'series-real',
-			data: [200, 380, 350, 320, 410, 450, 570, 400, 555, 620, 750, 900],
-		}, {
-			name: 'series-projection',
-			data: [240, 350, 360, 380, 400, 450, 480, 523, 555, 600, 700, 800],
-		}]
-	};
-
-	options = {
-		fullWidth: true,
-		lineSmooth: false,
-		height: "270px",
-		low: 0,
-		high: 'auto',
-		series: {
-			'series-projection': {
-				showArea: true,
-				showPoint: false,
-				showLine: false
-			},
-		},
-		axisX: {
-			showGrid: false,
-
-		},
-		axisY: {
-			showGrid: false,
-			onlyInteger: true,
-			offset: 0,
-		},
-		chartPadding: {
-			left: 20,
-			right: 20
-		}
-	};
-
-	new Chartist.Line('#visits-trends-chart', data, options);
-
-	// visits chart
-	data = {
-		labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-		series: [
-			[6384, 6342, 5437, 2764, 3958, 5068, 7654]
-		]
-	};
-
-	options = {
-		height: 300,
-		axisX: {
-			showGrid: false
-		},
-	};
-
-	new Chartist.Bar('#visits-chart', data, options);
-
-	// real-time pie chart
-	var sysLoad = $('#system-load').easyPieChart({
-		size: 130,
-		barColor: function(percent) {
-			return "rgb(" + Math.round(200 * percent / 100) + ", " + Math.round(200 * (1.1 - percent / 100)) + ", 0)";
-		},
-		trackColor: 'rgba(245, 245, 245, 0.8)',
-		scaleColor: false,
-		lineWidth: 5,
-		lineCap: "square",
-		animate: 800
-	});
-
-	var updateInterval = 3000; // in milliseconds
-
-	setInterval(function() {
-		var randomVal;
-		randomVal = getRandomInt(0, 100);
-
-		sysLoad.data('easyPieChart').update(randomVal);
-		sysLoad.find('.percent').text(randomVal);
-	}, updateInterval);
-
-	function getRandomInt(min, max) {
-		return Math.floor(Math.random() * (max - min + 1)) + min;
-	}
-
-});
+$(document).ready(Go(6));
 
 //判断session
 function GetSession() {
@@ -148,63 +35,38 @@ function Go(n) {
 	switch(n) {
 		case 0:
 			$("#container").hide();
-			$("#index").show();
-			//$("#changes_info").hide();
+			$("#home").show();
 			break;
-		case 1:
+		case 1:  //显示 填写入部申请 网页
 			$("#container").show();
-			$("#index").hide();
-			//$("#changes_info").hide();
+			$("#home").hide();
 			break;
-		case 2: //报名表提交
+		case 2: 	//弹出修改密码页面
 			{
-				var data = {
-					"n": "2",
-					"name": $("#name").val(),
-					"iphone": $("#iphone").val(),
-					"stuNumber": $("#stuNumber").val(),
-					"zhuanye": $("#zhuanye").val(),
-					"qq": $("#qq").val(),
-					"home": $("#home").val(),
-					"profile": $("#profile").val(),
-					"profile1": $("#profile1").val(),
-					"profile2": $("#profile2").val(),
-					"profile3": $("#profile3").val()
-				};
+				$("#mymodal1").modal("toggle"); 
+				break;
+			}
+		case 3:  //弹出账户信息页面
+			{
+				Go(5);  //Go(5)实时显示账户信息
+				$("#mymodal").modal("toggle");
 				$.ajax({
 					type: "POST",
 					dataType: "json",
-					url: "../home/php_method.php",
-					data: data,
-					success: function(response) {
-						alert(response);
+					data: {
+						"n": "7"
 					},
-					error: function(err) {
-						alert(err);
+					url: "../home/php_method.php",
+					success: function (response){
+						
+					},
+					error: function (err){
+						
 					}
 				})
-			}
-		case 3:      //
-			Go(5);  //Go(5)实时显示账户信息
-			$("#container").hide();
-			$("#index").hide();
-			$("#mymodal").modal("toggle");
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				data: {
-					"n": 7
-				},
-				url: "../home/php_method.php",
-				success: function (response){
-					
-				},
-				error: function (err){
-					
-				}
-			})
-			break;
-		case 4: //修改个人信息
+				break;				
+			}    
+		case 4: //账户信息修改信息
 			{
 				var data = {
 					"n": "4",
@@ -230,7 +92,7 @@ function Go(n) {
 				})
 				break;
 			}
-		case 5: //账户信息修改页
+		case 5: //账户信息修改页显示信息
 			{
 				$.ajax({
 					type: "POST",
@@ -254,6 +116,107 @@ function Go(n) {
 				})
 				break;
 			}
+		case 6:   //显示报名表信息  还有进部进度条信息
+			{
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					data: {
+						"n": "7"
+					},
+					url: "../home/php_method.php",
+					success: function (response){
+						$("#form_name").val(response.name);
+						$("#form_studentnumber").val(response.studentnumber);
+						$("#form_email").val(response.email);
+						$("#form_phone").val(response.phone);
+						$("#form_qq").val(response.qq);
+						$("#form_major").val(response.major);
+						$("#form_hometown").val(response.hometown);
+						$("#form_profile").val(response.profile);
+						$("#form_profile1").val(response.profile1);
+						$("#form_profile2").val(response.profile2);
+						$("#form_profile3").val(response.profile3); //显示报名表信息
+						
+						$("#progress_num").text(response.progress);
+						$("#progress_num1").css("width",response.progress+"%");
+						$("#progress_msg").text(response.progress_msg);	  	//显示进度条信息			
+					},
+					error: function (err){
+						
+					}
+				})
+				break;				
+			}	
+		case 7: 	//修改密码
+			{
+				var data = {
+					"n": "8",
+					"change_pwd": $("#change_pwd").val(),
+					"change_pwd1": $("#change_pwd1").val(),
+					"change_pwd2": $("#change_pwd2").val(),
+				};
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					url: "../home/php_method.php",
+					data: data,
+					success: function(response) {
+						if(response.msg=="密码不一样"){
+							alert("密码两次输入不一致，请重新输入！");
+						}else if(response.msg=="旧密码不对"){
+							alert("你输入的旧密码不正确，请重新输入！");
+						}else if(response.msg=="成功"){
+							alert("密码修改成功！");
+						}
+					},
+					error: function(err) {
+						alert(err);
+					}
+				})
+				break;
+			}			
 	}
 }
 //go div显隐end
+
+	//提交报名表
+	function CheckForm(){
+		var form_name = $("#form_name").val();
+		var form_studentnumber = $("#form_studentnumber").val();
+		var form_email = $("#form_email").val();
+		var form_phone = $("#form_phone").val();
+		var form_qq = $("#form_qq").val();
+		var form_major = $("#form_major").val();
+		var form_hometown = $("#form_hometown").val();
+		var form_profile = $("#form_profile").val();
+		var form_profile1 = $("#form_profile1").val();
+		var form_profile2 = $("#form_profile2").val();		
+		var form_profile3 = $("#form_profile3").val();	
+		var data = {
+			"n": "6",
+			"form_name": form_name,
+			"form_studentnumber": form_studentnumber,
+			"form_email": form_email,
+			"form_phone": form_phone,
+			"form_qq": form_qq,
+			"form_major": form_major,
+			"form_hometown": form_hometown,
+			"form_profile": form_profile,
+			"form_profile1": form_profile1,
+			"form_profile2": form_profile2,
+			"form_profile3": form_profile3
+		};
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			data: data,
+			url: "../home/php_method.php",
+			success: function (response){
+				alert(response.msg);
+			},
+			error: function (err){
+				alert(response.msg);
+			}
+		})
+	};

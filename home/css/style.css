@@ -241,7 +241,7 @@ form fieldset a.prev-step {
     display: none;
   }
 }
-/*.in, .beta.in {
+/*.in, */.beta.in {
   z-index: 30;
   display: block;
   opacity: 0;
@@ -249,7 +249,7 @@ form fieldset a.prev-step {
   -moz-animation: in 0.75s ease forwards 0.25s;
   -o-animation: in 0.75s ease forwards 0.25s;
   animation: in 0.75s ease forwards 0.25s;
-}*/
+}
 
 @-webkit-keyframes in {
   0% {

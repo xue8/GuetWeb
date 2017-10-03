@@ -47,9 +47,5 @@
 
 	$conn=new mysqli("localhost","root","root","test");
 	$conn->query("SET NAMES utf8");
-		// $filename = 'config.txt';
-		// $fp= fopen($filename, "a");
-		// $len = fwrite($fp,'读大学迷茫了，PHP中文网学PHP给你希望');
-		// echo  $len .'字节被写入了\n';
 
 ?>

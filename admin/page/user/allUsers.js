@@ -1,186 +1,171 @@
-layui.config({
-	base : "js/"
-}).use(['form','layer','jquery','laypage'],function(){
-	var form = layui.form(),
-		layer = parent.layer === undefined ? layui.layer : parent.layer,
-		laypage = layui.laypage,
-		$ = layui.jquery;
-
-	//加载页面数据
-	var usersData = '';
-	$.get("../../json/usersList.json", function(data){
-		usersData = data;
-		if(window.sessionStorage.getItem("addUser")){
-			var addUsers = window.sessionStorage.getItem("addUser");
-			usersData = JSON.parse(addUsers).concat(usersData);
-		}
-		//执行加载数据的方法
-		usersList();
-	})
-
-	//查询
-	$(".search_btn").click(function(){
-		var userArray = [];
-		if($(".search_input").val() != ''){
-			var index = layer.msg('查询中，请稍候',{icon: 16,time:false,shade:0.8});
-            setTimeout(function(){
-            	$.ajax({
-					url : "../../json/usersList.json",
-					type : "get",
-					dataType : "json",
-					success : function(data){
-						if(window.sessionStorage.getItem("addUsers")){
-							var addUsers = window.sessionStorage.getItem("addUsers");
-							usersData = JSON.parse(addUsers).concat(data);
-						}else{
-							usersData = data;
-						}
-						for(var i=0;i<usersData.length;i++){
-							var usersStr = usersData[i];
-							var selectStr = $(".search_input").val();
-		            		function changeStr(data){
-		            			var dataStr = '';
-		            			var showNum = data.split(eval("/"+selectStr+"/ig")).length - 1;
-		            			if(showNum > 1){
-									for (var j=0;j<showNum;j++) {
-		            					dataStr += data.split(eval("/"+selectStr+"/ig"))[j] + "<i style='color:#03c339;font-weight:bold;'>" + selectStr + "</i>";
-		            				}
-		            				dataStr += data.split(eval("/"+selectStr+"/ig"))[showNum];
-		            				return dataStr;
-		            			}else{
-		            				dataStr = data.split(eval("/"+selectStr+"/ig"))[0] + "<i style='color:#03c339;font-weight:bold;'>" + selectStr + "</i>" + data.split(eval("/"+selectStr+"/ig"))[1];
-		            				return dataStr;
-		            			}
-		            		}
-		            		//用户名
-		            		if(usersStr.userName.indexOf(selectStr) > -1){
-			            		usersStr["userName"] = changeStr(usersStr.userName);
-		            		}
-		            		//用户邮箱
-		            		if(usersStr.userEmail.indexOf(selectStr) > -1){
-			            		usersStr["userEmail"] = changeStr(usersStr.userEmail);
-		            		}
-		            		//性别
-		            		if(usersStr.userSex.indexOf(selectStr) > -1){
-			            		usersStr["userSex"] = changeStr(usersStr.userSex);
-		            		}
-		            		//会员等级
-		            		if(usersStr.userGrade.indexOf(selectStr) > -1){
-			            		usersStr["userGrade"] = changeStr(usersStr.userGrade);
-		            		}
-		            		if(usersStr.userName.indexOf(selectStr)>-1 || usersStr.userEmail.indexOf(selectStr)>-1 || usersStr.userSex.indexOf(selectStr)>-1 || usersStr.userGrade.indexOf(selectStr)>-1){
-		            			userArray.push(usersStr);
-		            		}
-		            	}
-		            	usersData = userArray;
-		            	usersList(usersData);
-					}
-				})
-            	
-                layer.close(index);
-            },2000);
-		}else{
-			layer.msg("请输入需要查询的内容");
-		}
-	})
-
-	//添加会员
-	$(".usersAdd_btn").click(function(){
-		var index = layui.layer.open({
-			title : "添加会员",
-			type : 2,
-			content : "addUser.html",
-			success : function(layero, index){
-				layui.layer.tips('点击此处返回文章列表', '.layui-layer-setwin .layui-layer-close', {
-					tips: 3
-				});
+$(document).ready(GetSession());
+//判断session
+function GetSession() {
+	$("#container").hide();
+	$("#index").show();
+	$("#changes_info").hide(); //div隐藏显示
+	$.ajax({
+		type: "POST",
+		url: "../../../admin/login_judge.php",
+		dataType: "json",
+		data: {
+			"result": "test"
+		},
+		success: function(response) {
+			if(response.msg == "失败！") {
+				alert("还没有登陆，请重新登陆！");
+				window.location.href = "../../";
+			} else {
+				$("#user_name").html("亲爱的:" + response.studentnumber);
+				//$("#user_name").html("亲爱的:"+response.name);
 			}
-		})
-		//改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
-		$(window).resize(function(){
-			layui.layer.full(index);
-		})
-		layui.layer.full(index);
-	})
-
-    //全选
-	form.on('checkbox(allChoose)', function(data){
-		var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([name="show"])');
-		child.each(function(index, item){
-			item.checked = data.elem.checked;
-		});
-		form.render('checkbox');
+		},
+		error: function(err) {
+			alert("登陆异常,请联系管理员！");
+			window.location.href = "../../";
+		}
 	});
+}
 
-	//通过判断文章是否全部选中来确定全选按钮是否选中
-	form.on("checkbox(choose)",function(data){
-		var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([name="show"])');
-		var childChecked = $(data.elem).parents('table').find('tbody input[type="checkbox"]:not([name="show"]):checked')
-		if(childChecked.length == child.length){
-			$(data.elem).parents('table').find('thead input#allChoose').get(0).checked = true;
-		}else{
-			$(data.elem).parents('table').find('thead input#allChoose').get(0).checked = false;
+$(document).ready(getBar());
+var userInfo =[];   //创建数组
+var per_num;		//分页数
+var studentnumber;   //学号
+function getUserInfo(n) {  //取得一个用户信息的数组
+	$("tr").remove(".trid");	 //每次换页时清空上一页的数据
+	$("#nowP").text("当前是第:"+n+"页");     //显示当前页数
+	var data = {
+		'n': 0,
+		'pageNow': n   //获得当前页面数
+	};
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		url: "allUsers.php",
+		data: data,
+		success: function (data){
+			var list = data.list;
+			$.each(list,function (index,val){
+				userInfo["uid"] = val['uid'];   //数组添加uid的属性
+				userInfo["studentnumber"] = val['studentnumber'];   //数组添加studentnumber的属性
+				userInfo["name"] = val['name'];   //数组添加name的属性
+				userInfo["email"] = val['email'];   //数组添加email的属性
+				userInfo["phone"] = val['phone'];   //数组添加phone的属性
+				userInfo["qq"] = val['qq'];   //数组添加qq的属性
+				userInfo["major"] = val['major'];   //数组添加major的属性
+				userInfo["hometown"] = val['hometown'];   //数组添加hometown的属性
+				pageInfo();
+			});
+		},
+		error: function (err){
+			alert("信息获取失败");
 		}
-		form.render('checkbox');
-	})
-
-	//操作
-	$("body").on("click",".users_edit",function(){  //编辑
-		layer.alert('您点击了会员编辑按钮，由于是纯静态页面，所以暂时不存在编辑内容，后期会添加，敬请谅解。。。',{icon:6, title:'文章编辑'});
-	})
-
-	$("body").on("click",".users_del",function(){  //删除
-		var _this = $(this);
-		layer.confirm('确定删除此用户？',{icon:3, title:'提示信息'},function(index){
-			//_this.parents("tr").remove();
-			for(var i=0;i<usersData.length;i++){
-				if(usersData[i].usersId == _this.attr("data-id")){
-					usersData.splice(i,1);
-					usersList(usersData);
-				}
-			}
-			layer.close(index);
-		});
-	})
-
-	function usersList(){
-		//渲染数据
-		function renderDate(data,curr){
-			var dataHtml = '';
-			currData = usersData.concat().splice(curr*nums-nums, nums);
-			if(currData.length != 0){
-				for(var i=0;i<currData.length;i++){
-					dataHtml += '<tr>'
-			    	+  '<td><input type="checkbox" name="checked" lay-skin="primary" lay-filter="choose"></td>'
-			    	+  '<td>'+currData[i].userName+'</td>'
-			    	+  '<td>'+currData[i].userEmail+'</td>'
-			    	+  '<td>'+currData[i].userSex+'</td>'
-			    	+  '<td>'+currData[i].userGrade+'</td>'
-			    	+  '<td>'+currData[i].userStatus+'</td>'
-			    	+  '<td>'+currData[i].userEndTime+'</td>'
-			    	+  '<td>'
-					+    '<a class="layui-btn layui-btn-mini users_edit"><i class="iconfont icon-edit"></i> 编辑</a>'
-					+    '<a class="layui-btn layui-btn-danger layui-btn-mini users_del" data-id="'+data[i].usersId+'"><i class="layui-icon">&#xe640;</i> 删除</a>'
-			        +  '</td>'
-			    	+'</tr>';
-				}
-			}else{
-				dataHtml = '<tr><td colspan="8">暂无数据</td></tr>';
-			}
-		    return dataHtml;
+	});
+}
+function getBar(){     //获得分页数
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		url: "allUsers.php",
+		data: {
+			"n": "0",
+			"pageNow": "1"
+		},
+		success: function (data){
+			var list = data.list;
+			$.each(list,function (index, val){
+				per_num = val['per_num'];
+			});
+			setBar();    
 		}
+	});
+}
+function setBar(){   //创建分页
+	for(var i=1; i<=per_num; i++){
+		$("#after_btn").before("<li><a onclick='getUserInfo("+i+")"+"'>"+i+"</a></li>");   //添加分页
+	}	
+	getUserInfo(per_num);
+}
+function pageInfo(){  //设置分页信息
+	$(".users_content").after(
+						"<tr class='trid'><td>"+userInfo["uid"]+
+						"</td><td id='stu'>"+userInfo["studentnumber"]+
+						"</td><td>"+userInfo['name']+
+						"</td><td>"+userInfo['email']+
+						"</td><td>"+userInfo['phone']+
+						"</td><td>"+userInfo['qq']+""+
+						"</td><td>"+userInfo['major']+
+						"</td><td>"+"<a onclick='showForm("+userInfo["studentnumber"]+")'>"+"查看"+"</a>"+
+						"</td><td>"+"<a onclick='getOperation("+userInfo["studentnumber"]+")'>"+"改密/进度"+"</a>"+
+						"</td></tr>"
+				);					
+}
 
-		//分页
-		var nums = 13; //每页出现的数据量
-		laypage({
-			cont : "page",
-			pages : Math.ceil(usersData.length/nums),
-			jump : function(obj){
-				$(".users_content").html(renderDate(usersData,obj.curr));
-				$('.users_list thead input[type="checkbox"]').prop("checked",false);
-		    	form.render();
-			}
-		})
-	}
-        
-})
+function showForm(studentnumber){   //显示报名表数据
+	$("#mymodal1").modal("toggle");
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		data: {
+			"n": 1,
+			"studentnumber": studentnumber
+		},
+		url: "allUsers.php",
+		success: function (response){
+			$("#profile").text(response.profile);
+			$("#profile1").text(response.profile1);
+			$("#profile2").text(response.profile2);
+			$("#profile3").text(response.profile3);
+		},
+		error: function (err){
+			alert("showForm失败");
+		}
+	})
+}
+
+function operation(studentnumber){   //改密 进度信息 进度百分比
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		data: {
+			"n": 2,
+			"studentnumber": studentnumber,
+			"password": $("#password").val(),
+			"progress_num": $("#progress_num").val(),
+			"progress_msg": $("#progress_msg").val()
+		},
+		url: "allUsers.php",
+		success: function (response){
+			alert("修改成功");
+		},
+		error: function (err){
+			alert("operation失败");
+		}
+	})	
+}
+
+function getOperation(studentnumber){   //显示 改密 进度信息 进度百分比 数据
+	$("#mymodal").modal("toggle");
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		data: {
+			"n": 3,
+			"studentnumber": studentnumber
+		},
+		url: "allUsers.php",
+		success: function (response){
+			$("#password").text(response.password);
+			$("#studentnumber111").text(studentnumber);
+			$("#progress_num").text(response.progress);
+			$("#progress_msg").text(response.progress_msg);
+		},
+		error: function (err){
+			alert("getOperation失败");
+		}
+	})	
+}
+function putOperation(){   //执行operation修改密码 进度信息
+	var stu = $("#studentnumber111").val();
+	operation(stu);
+}

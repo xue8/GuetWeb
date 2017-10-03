@@ -20,11 +20,15 @@
 		$password=$_POST['password'];
 		$result=$conn->query("SELECT studentnumber,password FROM member WHERE studentnumber='$studentnumber'");
 		$row=$result->fetch_assoc();
-		if($row['studentnumber']==$studentnumber && $row['password']==$password){
-			$_SESSION['studentnumber'] = $studentnumber;
-			echo json_encode(["err_code" => 200, "msg" => '登录成功！']);
-		} else {
-			echo json_encode(["err_code" => 500, "msg" => '账号或者密码错误！']);
+		if($studentnumber!=""){
+			if($row['studentnumber']==$studentnumber && $row['password']==$password){
+				$_SESSION['studentnumber'] = $studentnumber;
+				echo json_encode(["err_code" => 200, "msg" => '登录成功！']);
+			} else {
+				echo json_encode(["err_code" => 500, "msg" => '账号或者密码错误！']);
+			}			
+		}else {
+			echo json_encode(["err_code" => 500, "msg" => '账号密码不能为空！']);
 		}
 	}
 ?>

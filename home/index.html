@@ -45,22 +45,22 @@
 								</a>
 								<ul class="dropdown-menu notifications">
 									<li>
-										<a href="#" class="notification-item"><span class="dot bg-warning"></span>System space is almost full</a>
+										<a href="#" class="notification-item"><span class="dot bg-warning"></span>通知1</a>
 									</li>
 									<li>
-										<a href="#" class="notification-item"><span class="dot bg-danger"></span>You have 9 unfinished tasks</a>
+										<a href="#" class="notification-item"><span class="dot bg-danger"></span>通知2</a>
 									</li>
 									<li>
-										<a href="#" class="notification-item"><span class="dot bg-success"></span>Monthly report is available</a>
+										<a href="#" class="notification-item"><span class="dot bg-success"></span>通知3</a>
 									</li>
 									<li>
-										<a href="#" class="notification-item"><span class="dot bg-warning"></span>Weekly meeting in 1 hour</a>
+										<a href="#" class="notification-item"><span class="dot bg-warning"></span>通知4</a>
 									</li>
 									<li>
-										<a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a>
+										<a href="#" class="notification-item"><span class="dot bg-success"></span>通知5</a>
 									</li>
 									<li>
-										<a href="#" class="more">See all notifications</a>
+										<a href="#" class="more">看全部通知</a>
 									</li>
 								</ul>
 							</li>
@@ -89,7 +89,7 @@
 									</li>
 									<!-- <li><a href="#"><i class="lnr lnr-envelope"></i> <span>信息</span></a></li> -->
 									<li>
-										<a href="#"><i class="lnr lnr-cog"></i> <span>账号设置</span></a>
+										<a href="#" onclick="Go(2)"><i class="lnr lnr-cog"></i> <span>修改密码</span></a>
 									</li>
 									<li>
 										<a href="../logou.php"><i class="lnr lnr-exit"></i> <span>退出</span></a>
@@ -113,7 +113,7 @@
 								<a href="#" onclick="Go(0)" id "btn_index"><i class="lnr lnr-home"></i> <span>首页</span></a>
 							</li>
 							<li>
-								<a href="#" onclick="Go(1)" id="btn_apply"><i class="lnr lnr-code"></i> <span>填写入部申请</span></a>
+								<a href="#" onclick="Go(1);Go(6)" id="btn_apply"><i class="lnr lnr-code"></i> <span>填写入部申请</span></a>
 							</li>
 							<!-- <li><a href="charts.html" class=""><i class="lnr lnr-chart-bars"></i> <span>Charts</span></a></li>
 						<li><a href="panels.html" class=""><i class="lnr lnr-cog"></i> <span>Panels</span></a></li>
@@ -140,39 +140,57 @@
 			<div class="main">
 				<!-- MAIN CONTENT -->
 				<div class="main-content">
-					<div id="index" style="width: 600px;height:400px;">
-						<!--<div class="jumbotron">
-						  <h1>Hello, world!</h1>
-						  <p>...</p>
-						  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-						</div>	-->
+					<!--首页div-->
+					<div id="home">
+						<!--入部进度条start-->
+						<div class="panel panel-primary" id="progress_bar" style="width: 560px; height: 200px; float: left;">
+						    <div class="panel-heading">入部进度</div>
+						    <div class="panel-body" style="margin-top: 30px">
+								<div class="progress">
+								    <div id="progress_num1" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+								      <span id="progress_num">0</span>%
+								    </div>
+								</div>
+								<h3 id="progress_msg"></h3>
+						    </div>
+						</div>
+						<!--公告start-->
+						<div class="panel panel-primary" id="progress_bar" style="width: 560px; height: 200px; float: left; margin-left: 30px;">
+						    <div class="panel-heading">公告</div>
+						    公告msg
+						</div>	
+						<!--box1 start-->
+						<!--<div class="panel panel-primary" id="progress_bar" style="width: 560px; height: 200px; ">
+						    <div class="panel-heading">公告</div>
+						    box1
+						</div>						-->
 					</div>
-					
+					<!--首页div end-->
 					<!--报名表提交start-->
 					<section class='container' id="container">
 					  <form>
 					    <fieldset class='alpha'>
 					      <legend><b>1.</b> 填写个人信息</legend>
 					      <div class='frow'>
-					        <input class='item' placeholder='姓名' type='text' id="frome_name">
+					        	名字<input class='item' placeholder='' type='text' id="form_name">
 					      </div>
 					      <div class='frow'>
-					        <input class='item' placeholder='学号' type='number' id="frome_studentnumber">
+					        	学号<input class='item' placeholder='' type='number' id="form_studentnumber">
 					      </div>
 					      <div class='frow'>
-					        <input class='item' placeholder='邮箱' type='email' id="frome_email">
+					        	邮箱<input class='item' placeholder='' type='email' id="form_email">
 					      </div>
 					      <div class='frow'>
-					        <input class='item' placeholder='手机号' type='tel' id="frome_phone">
+					        	手机号<input class='item' placeholder='' type='tel' id="form_phone">
 					      </div>
 					      <div class='frow'>
-					        <input class='item' placeholder='QQ' type='number' id="frome_QQ">
+					        	QQ<input class='item' placeholder='' type='number' id="form_qq">
 					      </div>	
 					      <div class='frow'>
-					        <input class='item' placeholder='专业' type='text' id="frome_major">
+					        	专业<input class='item' placeholder='' type='text' id="form_major">
 					      </div>	
 					      <div class='frow'>
-					        <input class='item' placeholder='家乡' type='text' id="frome_home">
+					       	 	家乡<input class='item' placeholder='' type='text' id="form_hometown">
 					      </div>						      
 					      <div class='frow'>
 					        <a class='next-step' href='#'>下一步</a>
@@ -181,28 +199,28 @@
 					    <fieldset class='beta'>
 					      <legend><b>2.</b>填写报名表</legend>
 					      <div class='frow'>
-					        <input class='item' placeholder='个人简介' required='required' type='text' id="from_profile">
+					        	个人简介<input class='item' placeholder='' required='required' type='text' id="form_profile">
 					      </div>
 					      <div class='frow'>
-					        <input class='item' placeholder='曾任何职务，获何种奖励' required='required' type='text' id="from_profile1">
+					        	曾任何职务，获何种奖励<input class='item' placeholder='' required='required' type='text' id="form_profile1">
 					      </div>
 					      <div class='frow'>
-					        <input class='item' placeholder='对软件部的理解' required='required' type='text' id="from_profile2">
+					        	对软件部的理解<input class='item' placeholder='' required='required' type='text' id="form_profile2">
 					      </div>
 					      <div class='frow'>
-					        <input class='item' placeholder='学习意向及学习设想' required='required' type='text' id="from_profile3">
+					        	学习意向及学习设想<input class='item' placeholder='' required='required' type='text' id="form_profile3">
 					      </div>					      
 					      <div class='frow'>
 					        <a class='prev-step' href='#'>上一步</a>
 					      </div>
 					      <div class='frow'>
-					        <input class='submit' type='submit' value="提交" onclick="CheckFrom()">
+					        <input class='submit' type='submit' value="提交" onclick="CheckForm()">
 					      </div>
 					    </fieldset>
 					    <fieldset class='charlie'>
-					      <legend><b>3.</b>Your All Done</legend>
+					      <legend><b>3.</b>你已提交成功</legend>
 					      <div class='frow'>
-					        <p>Thanks</p>
+					        <p>GUET 校基地软件部</p>
 					      </div>
 					    </fieldset>
 					  </form>
@@ -255,6 +273,40 @@
 						</div>
 					</div>
 					<!--修改个人信end-->
+
+					<!--修改密码start-->
+					<div class="modal fade1" id="mymodal1" name="changePwd">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+					     			<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+					    			</button>
+									<h4 class="modal-title">修改个人信息</h4>
+								</div>
+								<div class="modal-body">
+									<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1">旧密码</span>
+										<input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" id="change_pwd">
+									</div>									
+									<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1">新密码</span>
+										<input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" id="change_pwd1">
+									</div>
+									<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1">重复新密码</span>
+										<input type="text" class="form-control" placeholder="" aria-describedby="basic-addon1" id="change_pwd2">
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+									<button type="button" class="btn btn-primary" onclick="Go(7)">修改</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--修改密码end-->
+					
 				</div>
 			</div>
 			<div class="clearfix"></div>
@@ -274,7 +326,6 @@
 		<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 		<script src="assets/vendor/chartist/js/chartist.min.js"></script>
 		<script src="assets/scripts/klorofil-common.js"></script>
-		<script src="../js/echarts.min.js"></script>
 		<script src="../js/home.js"></script>
 		<script src="js/modernizr.js"></script>
   		<script src="js/index.js"></script>

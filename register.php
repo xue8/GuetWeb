@@ -24,6 +24,7 @@
 			echo json_encode(["code" => 500, "msg" => "账号已存在，请重新选择账号"]);
 		}else{
 			$res=$conn->query("INSERT INTO member(studentnumber,password,email) VALUES('$studentnumber','$password','$email')");
+//			$res=$conn->query("INSERT INTO member_form(studentnumber) VALUES('$studentnumber')");
 			if($res){
 				echo json_encode(["code" => 200, "msg" => "注册成功"]);
 			}else {
