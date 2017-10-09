@@ -20,11 +20,19 @@
 		$password=$_POST['password'];
 		$result=$conn->query("SELECT user,password FROM admin_user WHERE user='$user'");
 		$row=$result->fetch_assoc();
-		if($row['user']==$user && $row['password']==$password){
-			$_SESSION['user'] = $user;
-			echo json_encode(["err_code" => 200, "msg" => '登录成功！']);
+		if($user != '' ){
+			if($password != ''){
+				if($row['user']==$user && $row['password']==$password){
+					$_SESSION['user'] = $user;
+					echo json_encode(["err_code" => 200, "msg" => '登录成功！']);
+				} else {
+					echo json_encode(["err_code" => 500, "msg" => '账号或者密码错误！']);
+				}
+			} else {
+				echo json_encode(["err_code" => 500, "msg" => '密码不能为空']);
+			}
 		} else {
-			echo json_encode(["err_code" => 500, "msg" => '账号或者密码错误！']);
+			echo json_encode(["err_code" => 500, "msg" => '账号不能为空']);
 		}
 	}
 ?>

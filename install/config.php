@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 	/**                   BY:xue8
  *   
  *                           ,.  
@@ -45,7 +45,7 @@
 	// 	//echo json_encode(["err_code" => 200, "msg" => '数据库连接失败！']);
 	// }
 
-	$conn=new mysqli("localhost","root","root","test");
+	$conn=new mysqli("localhost","root","","test");
 	$conn->query("SET NAMES utf8");
 
 ?>

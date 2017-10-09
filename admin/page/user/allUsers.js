@@ -62,6 +62,7 @@ function getUserInfo(n) {  //取得一个用户信息的数组
 		}
 	});
 }
+
 function getBar(){     //获得分页数
 	$.ajax({
 		type: "POST",
@@ -80,12 +81,14 @@ function getBar(){     //获得分页数
 		}
 	});
 }
+
 function setBar(){   //创建分页
 	for(var i=1; i<=per_num; i++){
 		$("#after_btn").before("<li><a onclick='getUserInfo("+i+")"+"'>"+i+"</a></li>");   //添加分页
 	}	
 	getUserInfo(per_num);
 }
+
 function pageInfo(){  //设置分页信息
 	$(".users_content").after(
 						"<tr class='trid'><td>"+userInfo["uid"]+
@@ -165,7 +168,47 @@ function getOperation(studentnumber){   //显示 改密 进度信息 进度百�
 		}
 	})	
 }
+
 function putOperation(){   //执行operation修改密码 进度信息
 	var stu = $("#studentnumber111").val();
 	operation(stu);
+}
+
+function searchUser(){         //搜索学号查询信息
+	var studentnumber = $(".search_input").val();
+	$("tr").remove(".trid");	 //清空数据 只显示搜索结果
+	if(studentnumber == ''){
+		alert("请输入学号查询");
+		return 0;
+	}
+	$.ajax({
+		type: "POST",
+		dataType: "json",
+		url: "allUsers.php",
+		data: {
+			"n": 4,
+			"studentnumber": studentnumber
+		},
+		success: function (response){
+			if(response.studentnumber == studentnumber){
+				$(".users_content").after(
+					"<tr class='trid'><td>"+response.uid+
+					"</td><td id='stu'>"+response.studentnumber+
+					"</td><td>"+response.name+
+					"</td><td>"+response.email+
+					"</td><td>"+response.phone+
+					"</td><td>"+response.qq+""+
+					"</td><td>"+response.major+
+					"</td><td>"+"<a onclick='showForm("+response.studentnumber+")'>"+"查看"+"</a>"+
+					"</td><td>"+"<a onclick='getOperation("+response.studentnumber+")'>"+"改密/进度"+"</a>"+
+					"</td></tr>"
+					);	
+			}else {
+				alert("查询不到该学号信息");
+			}			
+		},
+		error: function (err){
+			alert(err.msg+"err");	
+		}
+	})
 }

@@ -29,9 +29,9 @@
 														PRIMARY KEY(uid)
 														)"); //用户信息表
 		$conn->query("CREATE TABLE IF NOT EXISTS member_form(
+															studentnumber INT,
 															progress INT,
 															progress_msg VARCHAR(999), 
-															studentnumber INT,
 															profile VARCHAR(999),
 															profile1 VARCHAR(999),
 															profile2 VARCHAR(999),

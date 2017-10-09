@@ -91,6 +91,25 @@
 				echo json_encode($data);
 				break;				
 			}
+			case 4:   //搜索学号查信息
+			{
+				$studentnumber = $_POST['studentnumber'];
+				$result = $conn->query("SELECT * FROM member WHERE studentnumber = '$studentnumber' ");
+				$row = $result->fetch_assoc();
+				$data = array(
+							"msg" => "成功",
+							"uid" => $row['uid'], 
+							"studentnumber" => $row['studentnumber'], 
+							"name" => $row['name'], 
+							"email" => $row['email'], 
+							"phone" => $row['phone'], 
+							"qq" => $row['qq'], 
+							"major" => $row['major'], 
+							"hometown" => $row['hometown'],						
+							);
+				echo json_encode($data);
+				break;
+			}
 			
 		}
 	}	
